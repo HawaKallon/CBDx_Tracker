@@ -18,10 +18,11 @@ function localWorkbookPath(): string {
   if (fromEnv) {
     return fromEnv.startsWith('/') ? fromEnv : join(process.cwd(), fromEnv);
   }
+  // Default to the workbook committed inside the repo (web/data/UNICEF/...), so the
+  // app works on Vercel without any extra env config. Override with LOCAL_WORKBOOK_PATH.
   return join(
     /* turbopackIgnore: true */ process.cwd(),
-    '..',
-    '..',
+    'data',
     'UNICEF',
     '2025 DLHs Data Tracker.xlsx',
   );
