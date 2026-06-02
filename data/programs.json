@@ -1,0 +1,51 @@
+{
+  "programs": [
+    {
+      "slug": "dpg",
+      "name": "DPG Accelerator / DPG Tracker",
+      "description": "Digital Public Goods programme — full activity dashboard, locations, and reporting.",
+      "type": "external",
+      "enabled": true
+    },
+    {
+      "slug": "dlh-master",
+      "name": "DSTI Digital Learning Hubs",
+      "description": "Master table across all DLH sites — participants, gender, age, and education status.",
+      "type": "sheet",
+      "sheetName": "DSTI - DLHs(Master Table)",
+      "enabled": true
+    },
+    {
+      "slug": "easystem",
+      "name": "EasySTEM",
+      "description": "EasySTEM deployment data by hub and month.",
+      "type": "sheet",
+      "sheetName": "EasySTEM",
+      "enabled": true
+    },
+    {
+      "slug": "avoy",
+      "name": "AVoY Advocacy",
+      "description": "Advocacy activities and reach through U-Report and related channels.",
+      "type": "sheet",
+      "sheetName": "AVoY Adocacy",
+      "enabled": true
+    },
+    {
+      "slug": "educube",
+      "name": "EduCube",
+      "description": "EduCube programme — data pending in workbook.",
+      "type": "sheet",
+      "sheetName": "EduCube",
+      "enabled": false
+    },
+    {
+      "slug": "stfoundation",
+      "name": "ST Foundation",
+      "description": "ST Foundation programme — data pending in workbook.",
+      "type": "sheet",
+      "sheetName": "STFoundation",
+      "enabled": false
+    }
+  ]
+}
