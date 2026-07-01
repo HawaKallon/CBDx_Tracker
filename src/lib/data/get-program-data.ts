@@ -15,6 +15,12 @@ const WORKBOOKS: Record<string, string> = {
 export const AVAILABLE_YEARS = ['2026', '2025'] as const;
 export const DEFAULT_YEAR = '2026';
 
+export function normalizeYear(value: string | string[] | undefined): string {
+  return typeof value === 'string' && AVAILABLE_YEARS.some((year) => year === value)
+    ? value
+    : DEFAULT_YEAR;
+}
+
 function dataSource(): 'graph' | 'local' {
   const configured = process.env.DATA_SOURCE ?? 'local';
   if (configured === 'graph' && isGraphConfigured()) return 'graph';
