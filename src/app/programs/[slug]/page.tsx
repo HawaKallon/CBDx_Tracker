@@ -7,10 +7,11 @@ import { HubBarChart } from '@/components/charts/hub-bar-chart';
 import { MonthLineChart } from '@/components/charts/month-line-chart';
 import { DataTable } from '@/components/data-table';
 import { getProgramBySlug, loadProgramsRegistry } from '@/lib/programs/registry';
-import { getProgramSheetData, getWorkbookData } from '@/lib/data/get-program-data';
+import { getProgramSheetData, AVAILABLE_YEARS, normalizeYear } from '@/lib/data/get-program-data';
 
 type Props = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export function generateStaticParams() {
@@ -19,7 +20,7 @@ export function generateStaticParams() {
     .map((p) => ({ slug: p.slug }));
 }
 
-export default async function ProgramPage({ params }: Props) {
+export default async function ProgramPage({ params, searchParams }: Props) {
   const { slug } = await params;
   const program = getProgramBySlug(slug);
 
@@ -33,33 +34,62 @@ export default async function ProgramPage({ params }: Props) {
 
   return (
     <>
-      <SiteHeader title={program.name} subtitle={program.description} showBack />
+      <Suspense fallback={<HeaderSkeleton />}>
+        <ProgramHeader searchParams={searchParams} title={program.name} subtitle={program.description} />
+      </Suspense>
       <main className="mx-auto max-w-6xl flex-1 px-4 py-8 sm:px-6">
-        <Link href="/" className="text-sm font-medium text-sky-700 hover:text-sky-900">
-          ← Back to all programs
-        </Link>
+        <Suspense fallback={<div className="text-sm text-slate-500 animate-pulse">Loading...</div>}>
+          <BackLink searchParams={searchParams} />
+        </Suspense>
         <Suspense fallback={<ProgramLoading />}>
-          <ProgramDashboard slug={slug} sheetName={program.sheetName} />
+          <ProgramDashboardWithYear slug={slug} sheetName={program.sheetName} searchParams={searchParams} />
         </Suspense>
       </main>
     </>
   );
 }
 
-async function ProgramDashboard({ slug, sheetName }: { slug: string; sheetName: string }) {
-  const program = getProgramBySlug(slug);
-  const sheetData = await getProgramSheetData(sheetName);
-  const workbook = await getWorkbookData();
+async function HeaderSkeleton() {
+  return (
+    <div className="border-b border-sky-800 bg-gradient-to-r from-sky-700 to-sky-900 px-4 py-6 sm:px-6">
+      <div className="h-8 w-48 animate-pulse rounded bg-sky-600" />
+    </div>
+  );
+}
 
+async function ProgramHeader({ searchParams, title, subtitle }: { searchParams: Promise<Record<string, string | string[] | undefined>>; title: string; subtitle?: string }) {
+  const paramData = await searchParams;
+  const year = normalizeYear(paramData.year);
+  return <SiteHeader title={title} subtitle={subtitle} showBack currentYear={year} availableYears={AVAILABLE_YEARS} />;
+}
+
+async function BackLink({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const paramData = await searchParams;
+  const year = normalizeYear(paramData.year);
+  return (
+    <Link href={`/?year=${year}`} className="text-sm font-medium text-sky-700 hover:text-sky-900">
+      ← Back to all programs
+    </Link>
+  );
+}
+
+async function ProgramDashboardWithYear({ slug, sheetName, searchParams }: { slug: string; sheetName: string; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const paramData = await searchParams;
+  const year = normalizeYear(paramData.year);
+  return <ProgramDashboard slug={slug} sheetName={sheetName} year={year} />;
+}
+
+async function ProgramDashboard({ slug, sheetName, year }: { slug: string; sheetName: string; year: string }) {
+  const program = getProgramBySlug(slug);
+  const sheetData = await getProgramSheetData(sheetName, year);
   if (!program) notFound();
 
   if (!sheetData || sheetData.rows.length === 0) {
     return (
       <div className="mt-8 rounded-xl border border-amber-200 bg-amber-50 p-8 text-center">
-        <h2 className="text-lg font-semibold text-amber-900">No data in workbook yet</h2>
+        <h2 className="text-lg font-semibold text-amber-900">No records yet</h2>
         <p className="mt-2 text-sm text-amber-800">
-          The sheet &ldquo;{sheetName}&rdquo; has no rows with hub/month data. Add entries in Excel
-          Online and wait for the next sync.
+          No records have been entered for this program yet. Check back after the next data update.
         </p>
       </div>
     );
@@ -83,11 +113,6 @@ async function ProgramDashboard({ slug, sheetName }: { slug: string; sheetName: 
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Recent records</h2>
         <DataTable rows={sheetData.rows} />
       </section>
-
-      <footer className="text-sm text-slate-500">
-        Sheet: {sheetName} · Synced{' '}
-        <time dateTime={workbook.syncedAt}>{new Date(workbook.syncedAt).toLocaleString()}</time>
-      </footer>
     </div>
   );
 }
