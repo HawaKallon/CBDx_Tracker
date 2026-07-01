@@ -22,6 +22,11 @@ function dataSource(): 'graph' | 'local' {
 }
 
 function localWorkbookPath(year: string = DEFAULT_YEAR): string {
+  const fromEnv = year === DEFAULT_YEAR ? process.env.LOCAL_WORKBOOK_PATH : undefined;
+  if (fromEnv) {
+    return fromEnv.startsWith('/') ? fromEnv : join(process.cwd(), fromEnv);
+  }
+
   const filename = WORKBOOKS[year];
   if (!filename) {
     throw new Error(`Unknown year: ${year}. Available years: ${Object.keys(WORKBOOKS).join(', ')}`);
