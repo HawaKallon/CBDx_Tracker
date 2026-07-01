@@ -16,7 +16,7 @@ export default function HomePage({ searchParams }: Props) {
       <Suspense fallback={<SiteHeaderSkeleton />}>
         <HomeHeader searchParams={searchParams} />
       </Suspense>
-      <main className="mx-auto max-w-6xl flex-1 px-4 py-8 sm:px-6">
+      <main className="mx-auto w-full max-w-6xl min-w-0 flex-1 px-4 py-6 sm:px-6 sm:py-8">
         <Suspense fallback={<HomeLoading />}>
           <HomeContent programs={programs} searchParams={searchParams} />
         </Suspense>
@@ -62,7 +62,7 @@ async function HomeContent({ programs, searchParams }: { programs: ReturnType<ty
   return (
     <>
       {contributing.length > 0 ? (
-        <section className="mb-8 rounded-xl border border-sky-200 bg-white p-6 shadow-sm">
+        <section className="mb-8 min-w-0 rounded-xl border border-sky-200 bg-white p-4 shadow-sm sm:p-6">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-sky-800">
             Portfolio overview
           </h2>
@@ -78,9 +78,9 @@ async function HomeContent({ programs, searchParams }: { programs: ReturnType<ty
         </section>
       ) : null}
 
-      <section>
+      <section className="min-w-0">
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Programs & activities</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid min-w-0 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {programs
             .filter(
               (p) =>
@@ -122,9 +122,9 @@ async function HomeContent({ programs, searchParams }: { programs: ReturnType<ty
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (
-    <div>
+    <div className="min-w-0">
       <dt className="text-xs font-medium uppercase text-slate-500">{label}</dt>
-      <dd className="mt-1 text-2xl font-bold text-slate-900">{value.toLocaleString()}</dd>
+      <dd className="mt-1 text-xl font-bold tabular-nums text-slate-900 sm:text-2xl">{value.toLocaleString()}</dd>
     </div>
   );
 }
