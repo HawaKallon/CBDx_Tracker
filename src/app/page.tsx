@@ -81,19 +81,26 @@ async function HomeContent({ programs, searchParams }: { programs: ReturnType<ty
       <section>
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Programs & activities</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {programs.map((program) => {
-            const sheetData =
-              program.type === 'sheet' && program.sheetName
-                ? workbook.sheets[program.sheetName]
-                : null;
-            return (
-              <ProgramCard
-                key={program.slug}
-                program={program}
-                summary={sheetData?.summary ?? null}
-              />
-            );
-          })}
+          {programs
+            .filter(
+              (p) =>
+                p.enabled !== false &&
+                (p.type === 'external' ||
+                  (p.type === 'sheet' && p.sheetName && (workbook.sheets[p.sheetName]?.summary.rowCount ?? 0) > 0)),
+            )
+            .map((program) => {
+              const sheetData =
+                program.type === 'sheet' && program.sheetName
+                  ? workbook.sheets[program.sheetName]
+                  : null;
+              return (
+                <ProgramCard
+                  key={program.slug}
+                  program={program}
+                  summary={sheetData?.summary ?? null}
+                />
+              );
+            })}
         </div>
       </section>
 
