@@ -105,6 +105,17 @@ function parseSheet(sheetName: string, ws: XLSX.WorkSheet): ProgramSheetData | n
     const hasKeyColumn = hubCol !== undefined || monthCol !== undefined || dateCol !== undefined;
     if (hasKeyColumn && !hub && !month) continue;
 
+    // Skip rows where Male, Female, and Total are all blank (no data entered yet).
+    // This catches placeholder months like DSTI May–Dec 2026 where Male/Female are blank
+    // and Total is a formula =Male+Female that evaluates to 0.
+    // Preserve a genuinely written 0 total *only if* Male or Female also has a value.
+    const isBlankCell = (v: unknown) => v === '' || v === null || v === undefined;
+    const rawMale = maleCol !== undefined ? row[maleCol] : undefined;
+    const rawFemale = femaleCol !== undefined ? row[femaleCol] : undefined;
+    const rawTotal = totalCol !== undefined ? row[totalCol] : undefined;
+    const totalIsEmptyish = isBlankCell(rawTotal) || (toNum(rawTotal) === 0 && isBlankCell(rawMale) && isBlankCell(rawFemale));
+    if (isBlankCell(rawMale) && isBlankCell(rawFemale) && totalIsEmptyish) continue;
+
     const male = maleCol !== undefined ? toNum(row[maleCol]) : 0;
     const female = femaleCol !== undefined ? toNum(row[femaleCol]) : 0;
     let total = totalCol !== undefined ? toNum(row[totalCol]) : 0;
