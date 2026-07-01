@@ -80,8 +80,8 @@ export function DataTable({ rows }: Props) {
               <tr key={`${row.hub}-${row.monthLabel}-${i}`}>
                 <td className="px-4 py-2 text-slate-700">{row.monthLabel || '—'}</td>
                 <td className="px-4 py-2 text-slate-900">{row.hub || '—'}</td>
-                <td className="px-4 py-2 text-right text-slate-700">{row.male.toLocaleString()}</td>
-                <td className="px-4 py-2 text-right text-slate-700">{row.female.toLocaleString()}</td>
+                <td className="px-4 py-2 text-right text-slate-700">{formatGenderValue(row, row.male)}</td>
+                <td className="px-4 py-2 text-right text-slate-700">{formatGenderValue(row, row.female)}</td>
                 <td className="px-4 py-2 text-right font-medium text-slate-900">
                   {row.total.toLocaleString()}
                 </td>
