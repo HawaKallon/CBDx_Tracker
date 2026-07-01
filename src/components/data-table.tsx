@@ -50,13 +50,13 @@ export function DataTable({ rows }: Props) {
               <div>
                 <dt className="text-xs text-slate-500">Male</dt>
                 <dd className="mt-0.5 font-medium tabular-nums text-slate-700">
-                  {row.male.toLocaleString()}
+                  {formatGenderValue(row, row.male)}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-slate-500">Female</dt>
                 <dd className="mt-0.5 font-medium tabular-nums text-slate-700">
-                  {row.female.toLocaleString()}
+                  {formatGenderValue(row, row.female)}
                 </dd>
               </div>
             </dl>
@@ -114,4 +114,9 @@ export function DataTable({ rows }: Props) {
       )}
     </div>
   );
+}
+
+function formatGenderValue(row: HubRow, value: number): string {
+  const isTotalOnlyRecord = row.total > 0 && row.male === 0 && row.female === 0;
+  return isTotalOnlyRecord ? '—' : value.toLocaleString();
 }
