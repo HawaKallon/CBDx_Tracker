@@ -117,9 +117,6 @@ Open `web/.env` and update these values:
 # Change from 'local' to 'graph' to use Excel Online
 DATA_SOURCE=graph
 
-# Keep pointing to local backup (in case Excel Online fails)
-LOCAL_WORKBOOK_PATH=data/UNICEF/2026 DLHs Data Tracker - 2.xlsx
-
 # Refresh the cached data every 5 minutes
 SYNC_REVALIDATE_SECONDS=300
 
