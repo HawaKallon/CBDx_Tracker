@@ -92,11 +92,11 @@ export function DataTable({ rows }: Props) {
       </div>
 
       {totalPages > 1 && (
-        <div className="mt-4 flex items-center justify-center gap-2">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
           <button
             onClick={goToPrev}
             disabled={currentPage === 0}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:pointer-events-none transition"
+            className="min-h-10 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
           >
             ← Prev
           </button>
@@ -106,7 +106,7 @@ export function DataTable({ rows }: Props) {
           <button
             onClick={goToNext}
             disabled={currentPage >= totalPages - 1}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:pointer-events-none transition"
+            className="min-h-10 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
           >
             Next →
           </button>
