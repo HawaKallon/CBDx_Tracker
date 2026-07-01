@@ -24,6 +24,22 @@
       "enabled": true
     },
     {
+      "slug": "wan-hub",
+      "name": "WAN Hub",
+      "description": "West Africa Network innovation hubs — participants and reach across partner sites.",
+      "type": "sheet",
+      "sheetName": "WAN Hub",
+      "enabled": true
+    },
+    {
+      "slug": "learning-passport",
+      "name": "Learning Passport",
+      "description": "Learning Passport programme — digital credential holders and engagement.",
+      "type": "sheet",
+      "sheetName": "Learning Passport ",
+      "enabled": true
+    },
+    {
       "slug": "avoy",
       "name": "AVoY Advocacy",
       "description": "Advocacy activities and reach through U-Report and related channels.",

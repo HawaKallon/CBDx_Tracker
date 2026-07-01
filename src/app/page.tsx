@@ -2,25 +2,39 @@ import { Suspense } from 'react';
 import { SiteHeader } from '@/components/site-header';
 import { ProgramCard } from '@/components/program-card';
 import { loadProgramsRegistry } from '@/lib/programs/registry';
-import { getWorkbookData } from '@/lib/data/get-program-data';
+import { getWorkbookData, AVAILABLE_YEARS, normalizeYear } from '@/lib/data/get-program-data';
 
-export default function HomePage() {
+type Props = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default function HomePage({ searchParams }: Props) {
   const programs = loadProgramsRegistry();
 
   return (
     <>
-      <SiteHeader />
+      <Suspense fallback={<SiteHeaderSkeleton />}>
+        <HomeHeader searchParams={searchParams} />
+      </Suspense>
       <main className="mx-auto max-w-6xl flex-1 px-4 py-8 sm:px-6">
         <Suspense fallback={<HomeLoading />}>
-          <HomeContent programs={programs} />
+          <HomeContent programs={programs} searchParams={searchParams} />
         </Suspense>
       </main>
     </>
   );
 }
 
-async function HomeContent({ programs }: { programs: ReturnType<typeof loadProgramsRegistry> }) {
-  const workbook = await getWorkbookData();
+async function HomeHeader({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const params = await searchParams;
+  const year = normalizeYear(params.year);
+  return <SiteHeader currentYear={year} availableYears={AVAILABLE_YEARS} />;
+}
+
+async function HomeContent({ programs, searchParams }: { programs: ReturnType<typeof loadProgramsRegistry>; searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const params = await searchParams;
+  const year = normalizeYear(params.year);
+  const workbook = await getWorkbookData(year);
 
   // Combine every enabled sheet-backed program into a single portfolio total.
   // DPG lives on a separate site and is intentionally excluded for now.
@@ -67,19 +81,26 @@ async function HomeContent({ programs }: { programs: ReturnType<typeof loadProgr
       <section>
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Programs & activities</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {programs.map((program) => {
-            const sheetData =
-              program.type === 'sheet' && program.sheetName
-                ? workbook.sheets[program.sheetName]
-                : null;
-            return (
-              <ProgramCard
-                key={program.slug}
-                program={program}
-                summary={sheetData?.summary ?? null}
-              />
-            );
-          })}
+          {programs
+            .filter(
+              (p) =>
+                p.enabled !== false &&
+                (p.type === 'external' ||
+                  (p.type === 'sheet' && p.sheetName && (workbook.sheets[p.sheetName]?.summary.rowCount ?? 0) > 0)),
+            )
+            .map((program) => {
+              const sheetData =
+                program.type === 'sheet' && program.sheetName
+                  ? workbook.sheets[program.sheetName]
+                  : null;
+              return (
+                <ProgramCard
+                  key={program.slug}
+                  program={program}
+                  summary={sheetData?.summary ?? null}
+                />
+              );
+            })}
         </div>
       </section>
 
@@ -104,6 +125,14 @@ function Stat({ label, value }: { label: string; value: number }) {
     <div>
       <dt className="text-xs font-medium uppercase text-slate-500">{label}</dt>
       <dd className="mt-1 text-2xl font-bold text-slate-900">{value.toLocaleString()}</dd>
+    </div>
+  );
+}
+
+function SiteHeaderSkeleton() {
+  return (
+    <div className="border-b border-sky-800 bg-gradient-to-r from-sky-700 to-sky-900 px-4 py-6 sm:px-6">
+      <div className="h-8 w-48 animate-pulse rounded bg-sky-600" />
     </div>
   );
 }
