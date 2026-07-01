@@ -50,13 +50,13 @@ export function DataTable({ rows }: Props) {
               <div>
                 <dt className="text-xs text-slate-500">Male</dt>
                 <dd className="mt-0.5 font-medium tabular-nums text-slate-700">
-                  {row.male.toLocaleString()}
+                  {formatGenderValue(row, row.male)}
                 </dd>
               </div>
               <div>
                 <dt className="text-xs text-slate-500">Female</dt>
                 <dd className="mt-0.5 font-medium tabular-nums text-slate-700">
-                  {row.female.toLocaleString()}
+                  {formatGenderValue(row, row.female)}
                 </dd>
               </div>
             </dl>
@@ -65,7 +65,7 @@ export function DataTable({ rows }: Props) {
       </div>
 
       <div className="hidden w-full max-w-full overflow-x-auto rounded-lg border border-slate-200 sm:block">
-        <table className="min-w-[640px] divide-y divide-slate-200 text-sm">
+        <table className="w-full min-w-[640px] divide-y divide-slate-200 text-sm">
           <thead className="bg-slate-50">
             <tr>
               <th className="px-4 py-2 text-left font-medium text-slate-600">Month</th>
@@ -80,8 +80,8 @@ export function DataTable({ rows }: Props) {
               <tr key={`${row.hub}-${row.monthLabel}-${i}`}>
                 <td className="px-4 py-2 text-slate-700">{row.monthLabel || '—'}</td>
                 <td className="px-4 py-2 text-slate-900">{row.hub || '—'}</td>
-                <td className="px-4 py-2 text-right text-slate-700">{row.male.toLocaleString()}</td>
-                <td className="px-4 py-2 text-right text-slate-700">{row.female.toLocaleString()}</td>
+                <td className="px-4 py-2 text-right text-slate-700">{formatGenderValue(row, row.male)}</td>
+                <td className="px-4 py-2 text-right text-slate-700">{formatGenderValue(row, row.female)}</td>
                 <td className="px-4 py-2 text-right font-medium text-slate-900">
                   {row.total.toLocaleString()}
                 </td>
@@ -114,4 +114,9 @@ export function DataTable({ rows }: Props) {
       )}
     </div>
   );
+}
+
+function formatGenderValue(row: HubRow, value: number): string {
+  const isTotalOnlyRecord = row.total > 0 && row.male === 0 && row.female === 0;
+  return isTotalOnlyRecord ? '—' : value.toLocaleString();
 }
