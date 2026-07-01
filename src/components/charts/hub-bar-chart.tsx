@@ -17,13 +17,19 @@ type Props = {
 };
 
 export function HubBarChart({ data }: Props) {
-  const chartData = data.slice(0, 12).map((d) => ({
-    name: d.hub.length > 18 ? `${d.hub.slice(0, 16)}…` : d.hub,
-    fullName: d.hub,
-    male: d.male,
-    female: d.female,
-    total: d.total,
-  }));
+  const chartData = data.slice(0, 12).map((d) => {
+    const hasGenderData = d.male !== 0 || d.female !== 0;
+
+    return {
+      name: d.hub.length > 18 ? `${d.hub.slice(0, 16)}…` : d.hub,
+      fullName: d.hub,
+      male: hasGenderData ? d.male : null,
+      female: hasGenderData ? d.female : null,
+      totalOnly: !hasGenderData && d.total > 0 ? d.total : null,
+    };
+  });
+
+  const hasTotalOnlyData = chartData.some((d) => d.totalOnly !== null);
 
   if (!chartData.length) {
     return <p className="text-sm text-slate-500">No hub data to chart.</p>;
@@ -47,6 +53,9 @@ export function HubBarChart({ data }: Props) {
           <Legend />
           <Bar dataKey="male" name="Male" fill="#0284c7" stackId="a" />
           <Bar dataKey="female" name="Female" fill="#f472b6" stackId="a" />
+          {hasTotalOnlyData ? (
+            <Bar dataKey="totalOnly" name="Total" fill="#0f766e" stackId="a" />
+          ) : null}
         </BarChart>
       </ResponsiveContainer>
     </div>
