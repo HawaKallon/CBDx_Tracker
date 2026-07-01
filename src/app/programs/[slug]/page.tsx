@@ -37,7 +37,7 @@ export default async function ProgramPage({ params, searchParams }: Props) {
       <Suspense fallback={<HeaderSkeleton />}>
         <ProgramHeader searchParams={searchParams} title={program.name} subtitle={program.description} />
       </Suspense>
-      <main className="mx-auto max-w-6xl flex-1 px-4 py-8 sm:px-6">
+      <main className="mx-auto w-full max-w-6xl min-w-0 flex-1 px-4 py-6 sm:px-6 sm:py-8">
         <Suspense fallback={<div className="text-sm text-slate-500 animate-pulse">Loading...</div>}>
           <BackLink searchParams={searchParams} />
         </Suspense>
@@ -96,20 +96,20 @@ async function ProgramDashboard({ slug, sheetName, year }: { slug: string; sheet
   }
 
   return (
-    <div className="mt-6 space-y-8">
+    <div className="mt-6 min-w-0 space-y-6 sm:space-y-8">
       <KpiStrip summary={sheetData.summary} />
 
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Participants by hub</h2>
         <HubBarChart data={sheetData.byHub} />
       </section>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+      <section className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Trend by month</h2>
         <MonthLineChart rows={sheetData.rows} />
       </section>
 
-      <section>
+      <section className="min-w-0">
         <h2 className="mb-4 text-lg font-semibold text-slate-900">Recent records</h2>
         <DataTable rows={sheetData.rows} />
       </section>
