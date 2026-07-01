@@ -65,7 +65,7 @@ export function DataTable({ rows }: Props) {
       </div>
 
       <div className="hidden w-full max-w-full overflow-x-auto rounded-lg border border-slate-200 sm:block">
-        <table className="min-w-[640px] divide-y divide-slate-200 text-sm">
+        <table className="w-full min-w-[640px] divide-y divide-slate-200 text-sm">
           <thead className="bg-slate-50">
             <tr>
               <th className="px-4 py-2 text-left font-medium text-slate-600">Month</th>
