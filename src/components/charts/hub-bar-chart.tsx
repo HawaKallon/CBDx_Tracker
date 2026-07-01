@@ -37,6 +37,7 @@ export function HubBarChart({ data }: Props) {
           <XAxis dataKey="name" tick={{ fontSize: 11 }} angle={-35} textAnchor="end" height={80} />
           <YAxis tick={{ fontSize: 11 }} />
           <Tooltip
+            cursor={false}
             formatter={(value, name) => [Number(value).toLocaleString(), String(name)]}
             labelFormatter={(_, payload) => {
               const item = payload?.[0]?.payload as { fullName?: string } | undefined;
