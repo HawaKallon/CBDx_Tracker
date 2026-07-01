@@ -17,8 +17,8 @@ export function ProgramCard({ program, summary }: Props) {
   const content = (
   <>
     <div className="flex items-start justify-between gap-3">
-      <div>
-        <h3 className="text-lg font-semibold text-slate-900">{program.name}</h3>
+      <div className="min-w-0">
+        <h3 className="break-words text-lg font-semibold text-slate-900">{program.name}</h3>
         {program.description ? (
           <p className="mt-1 text-sm text-slate-600 line-clamp-2">{program.description}</p>
         ) : null}
@@ -52,7 +52,7 @@ export function ProgramCard({ program, summary }: Props) {
   );
 
   const className = cn(
-    'block rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-sky-300 hover:shadow-md',
+    'block min-w-0 max-w-full rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:border-sky-300 hover:shadow-md sm:p-5',
     disabled && 'opacity-60 pointer-events-none',
   );
 
