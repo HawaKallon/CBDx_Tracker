@@ -30,11 +30,11 @@ export function HubBarChart({ data }: Props) {
   }
 
   return (
-    <div className="h-72 min-h-72 w-full min-w-0">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 48 }}>
+    <div className="h-96 min-h-96 w-full min-w-0">
+      <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+        <BarChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 80 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="name" tick={{ fontSize: 11 }} angle={-35} textAnchor="end" height={60} />
+          <XAxis dataKey="name" tick={{ fontSize: 11 }} angle={-35} textAnchor="end" height={80} />
           <YAxis tick={{ fontSize: 11 }} />
           <Tooltip
             formatter={(value, name) => [Number(value).toLocaleString(), String(name)]}
