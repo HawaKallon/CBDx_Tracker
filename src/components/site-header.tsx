@@ -21,16 +21,16 @@ export function SiteHeader({
 }: Props) {
   return (
     <header className="border-b border-sky-800 bg-gradient-to-r from-sky-700 to-sky-900 text-white">
-      <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-6 sm:px-6">
-        <div className="flex items-start justify-between gap-4">
-          <div>
+      <div className="mx-auto flex w-full max-w-6xl min-w-0 flex-col gap-1 px-4 py-5 sm:px-6 sm:py-6">
+        <div className="flex min-w-0 flex-col items-start gap-4 sm:flex-row sm:justify-between">
+          <div className="min-w-0 max-w-full">
             {showBack ? (
               <Link href={currentYear ? `/?year=${currentYear}` : '/'} className="text-xs font-semibold uppercase tracking-widest text-sky-200 hover:text-white">
                 ← All programs
               </Link>
             ) : null}
-            <h1 className="text-2xl font-bold sm:text-3xl">{title}</h1>
-            {subtitle ? <p className="text-sm text-sky-100">{subtitle}</p> : null}
+            <h1 className="break-words text-xl font-bold sm:text-3xl">{title}</h1>
+            {subtitle ? <p className="mt-1 break-words text-sm text-sky-100">{subtitle}</p> : null}
           </div>
           <Suspense fallback={<YearSelectSkeleton />}>
             {currentYear && availableYears ? <YearSelect currentYear={currentYear} availableYears={availableYears} /> : null}

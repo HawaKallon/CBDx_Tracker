@@ -25,9 +25,47 @@ export function DataTable({ rows }: Props) {
   const goToNext = () => setPage((p) => Math.min(totalPages - 1, p + 1));
 
   return (
-    <div>
-      <div className="overflow-x-auto rounded-lg border border-slate-200">
-        <table className="min-w-full divide-y divide-slate-200 text-sm">
+    <div className="min-w-0 max-w-full">
+      <div className="space-y-3 sm:hidden">
+        {display.map((row, i) => (
+          <article
+            key={`${row.hub}-${row.monthLabel}-${i}`}
+            className="min-w-0 rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
+          >
+            <div className="flex min-w-0 items-start justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                  {row.monthLabel || 'Month not provided'}
+                </p>
+                <p className="mt-1 break-words font-medium text-slate-900">{row.hub || '—'}</p>
+              </div>
+              <div className="shrink-0 text-right">
+                <p className="text-xs text-slate-500">Total</p>
+                <p className="font-semibold tabular-nums text-slate-900">
+                  {row.total.toLocaleString()}
+                </p>
+              </div>
+            </div>
+            <dl className="mt-3 grid grid-cols-2 gap-3 border-t border-slate-100 pt-3 text-sm">
+              <div>
+                <dt className="text-xs text-slate-500">Male</dt>
+                <dd className="mt-0.5 font-medium tabular-nums text-slate-700">
+                  {row.male.toLocaleString()}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs text-slate-500">Female</dt>
+                <dd className="mt-0.5 font-medium tabular-nums text-slate-700">
+                  {row.female.toLocaleString()}
+                </dd>
+              </div>
+            </dl>
+          </article>
+        ))}
+      </div>
+
+      <div className="hidden w-full max-w-full overflow-x-auto rounded-lg border border-slate-200 sm:block">
+        <table className="min-w-[640px] divide-y divide-slate-200 text-sm">
           <thead className="bg-slate-50">
             <tr>
               <th className="px-4 py-2 text-left font-medium text-slate-600">Month</th>
@@ -54,11 +92,11 @@ export function DataTable({ rows }: Props) {
       </div>
 
       {totalPages > 1 && (
-        <div className="mt-4 flex items-center justify-center gap-2">
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
           <button
             onClick={goToPrev}
             disabled={currentPage === 0}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:pointer-events-none transition"
+            className="min-h-10 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
           >
             ← Prev
           </button>
@@ -68,7 +106,7 @@ export function DataTable({ rows }: Props) {
           <button
             onClick={goToNext}
             disabled={currentPage >= totalPages - 1}
-            className="rounded-md border border-slate-300 bg-white px-3 py-1 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:pointer-events-none transition"
+            className="min-h-10 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-50"
           >
             Next →
           </button>

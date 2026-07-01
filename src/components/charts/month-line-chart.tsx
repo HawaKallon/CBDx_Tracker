@@ -32,12 +32,12 @@ export function MonthLineChart({ rows }: Props) {
   }
 
   return (
-    <div className="h-64 min-h-64 w-full min-w-0">
+    <div className="h-60 min-h-60 w-full min-w-0 max-w-full overflow-hidden sm:h-64 sm:min-h-64">
       <ResponsiveContainer width="100%" height="100%" minWidth={0}>
-        <LineChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
+        <LineChart data={chartData} margin={{ top: 8, right: 4, left: -16, bottom: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-          <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-          <YAxis tick={{ fontSize: 11 }} />
+          <XAxis dataKey="month" tick={{ fontSize: 10 }} />
+          <YAxis tick={{ fontSize: 10 }} width={48} />
           <Tooltip formatter={(v) => [Number(v).toLocaleString(), 'Participants']} />
           <Line type="monotone" dataKey="total" stroke="#0284c7" strokeWidth={2} dot={{ r: 3 }} />
         </LineChart>
